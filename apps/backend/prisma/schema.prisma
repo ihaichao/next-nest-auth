@@ -1,0 +1,36 @@
+// Prisma Schema for Authentication System
+// Documentation: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// User model for authentication
+/// 
+/// Key fields:
+/// - password: bcrypt hashed (never store plain text!)
+/// - failedAttempts: tracks consecutive failed logins
+/// - lastFailedAt: timestamp of last failed attempt
+/// - lockedUntil: if set, user cannot login until this time
+model User {
+  id       String @id @default(uuid())
+  username String @unique
+  password String // bcrypt hashed
+
+  // Rate limiting fields (3 attempts per 5 minutes)
+  failedAttempts Int       @default(0)
+  lastFailedAt   DateTime?
+  lockedUntil    DateTime?
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Index for faster username lookups during login
+  @@index([username])
+}
