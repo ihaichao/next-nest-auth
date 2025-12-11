@@ -26,14 +26,29 @@ export class TrpcMiddleware implements NestMiddleware {
     // Build the full URL for the Fetch API Request
     const url = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
 
+    // Create headers object excluding problematic express-specific headers
+    const headers: Record<string, string> = {};
+    for (const [key, value] of Object.entries(req.headers)) {
+      if (typeof value === 'string') {
+        headers[key] = value;
+      } else if (Array.isArray(value)) {
+        headers[key] = value.join(', ');
+      }
+    }
+
+    // For mutations, we need to pass the body properly
+    // Express has already parsed it, so we need to re-stringify
+    let body: string | undefined;
+    if (req.method !== 'GET' && req.method !== 'HEAD' && req.body) {
+      body = JSON.stringify(req.body);
+      headers['content-type'] = 'application/json';
+    }
+
     // Convert Express Request to Fetch API Request
     const fetchRequest = new Request(url, {
       method: req.method,
-      headers: req.headers as HeadersInit,
-      body:
-        req.method !== 'GET' && req.method !== 'HEAD'
-          ? JSON.stringify(req.body)
-          : undefined,
+      headers,
+      body,
     });
 
     // Process with tRPC
@@ -53,7 +68,7 @@ export class TrpcMiddleware implements NestMiddleware {
       res.setHeader(key, value);
     });
 
-    const body = await response.text();
-    res.send(body);
+    const responseBody = await response.text();
+    res.send(responseBody);
   }
 }
