@@ -18,7 +18,7 @@ if ! command -v docker &> /dev/null; then
 fi
 
 # Check if Docker Compose is installed
-if ! command -v docker-compose &> /dev/null; then
+if ! command -v docker compose &> /dev/null; then
     echo -e "${RED}Docker Compose is not installed. Please install Docker Compose first.${NC}"
     echo "Visit: https://docs.docker.com/compose/install/"
     exit 1
@@ -40,22 +40,22 @@ fi
 
 # Stop existing containers
 echo -e "${BLUE}🛑 Stopping existing containers...${NC}"
-docker-compose down
+docker compose down
 
 # Build and start services
 echo -e "${BLUE}🏗️ Building and starting services...${NC}"
-docker-compose up -d --build
+docker compose up -d --build
 
 # Check health
 echo -e "${BLUE}🏥 Checking service health...${NC}"
 sleep 10
-if docker-compose ps | grep -q "Up"; then
+if docker compose ps | grep -q "Up"; then
     echo -e "${GREEN}✅ Deployment successful!${NC}"
     echo -e "${BLUE}Services are defined as:${NC}"
-    docker-compose ps
+    docker compose ps
     echo ""
     echo -e "Frontend: http://localhost:3000 (or your VPS IP)"
     echo -e "Backend:  http://localhost:4000"
 else
-    echo -e "${RED}❌ Deployment failed. Check logs with 'docker-compose logs'${NC}"
+    echo -e "${RED}❌ Deployment failed. Check logs with 'docker compose logs'${NC}"
 fi
