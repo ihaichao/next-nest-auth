@@ -1,8 +1,6 @@
 # Docker Compose for Next-Nest-Auth
 # Includes: PostgreSQL, Backend (NestJS), Frontend (Next.js)
 
-version: '3.8'
-
 services:
   # PostgreSQL Database
   postgres:
