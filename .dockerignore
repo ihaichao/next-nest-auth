@@ -1,11 +1,16 @@
+# Docker ignore file
+
 # Dependencies
 node_modules
-.pnpm-store
+**/node_modules
 
 # Build outputs
-dist
 .next
-out
+**/.next
+dist
+**/dist
+.turbo
+**/.turbo
 
 # Environment files
 .env
@@ -27,14 +32,12 @@ Thumbs.db
 npm-debug.log*
 pnpm-debug.log*
 
-# Testing
+# Test coverage
 coverage
+**/coverage
 
-# Turbo
-.turbo
-
-# Prisma
-apps/backend/prisma/*.db
-apps/backend/prisma/*.db-journal
-
-.claude
+# Misc
+.git
+.gitignore
+*.md
+!README.md

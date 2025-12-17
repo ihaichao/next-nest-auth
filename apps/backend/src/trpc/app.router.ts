@@ -6,17 +6,10 @@ import { router, createAuthRouter, TrpcContext } from './auth.router';
  * Structure:
  * - auth.signup
  * - auth.signin
- * 
- * Add more routers here as the app grows, e.g.:
- * - user.profile
- * - user.updatePassword
  */
 export const createAppRouter = () => {
   return router({
     auth: createAuthRouter(),
-    // Add more routers here:
-    // user: createUserRouter(),
-    // admin: createAdminRouter(),
   });
 };
 
