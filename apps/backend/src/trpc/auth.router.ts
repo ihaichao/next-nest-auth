@@ -27,37 +27,42 @@ export const publicProcedure = t.procedure;
  * - signup: Create new user (mutation)
  * - signin: Authenticate user, return JWT (mutation)
  */
-export const createAuthRouter = () => {
-  return router({
-    /**
-     * Signup Procedure
-     * 
-     * Input: { username: string, password: string }
-     * Output: AuthResponse (success with user, or error)
-     * 
-     * Uses signupSchema from shared package for validation
-     */
-    signup: publicProcedure
-      .input(signupSchema)  // Validates input with Zod
-      .mutation(async ({ input, ctx }) => {
-        return ctx.authService.signup(input);
-      }),
+/**
+ * Auth Router - handles signup and signin
+ * 
+ * Procedures:
+ * - signup: Create new user (mutation)
+ * - signin: Authenticate user, return JWT (mutation)
+ */
+export const authRouter = router({
+  /**
+   * Signup Procedure
+   * 
+   * Input: { username: string, password: string }
+   * Output: AuthResponse (success with user, or error)
+   * 
+   * Uses signupSchema from shared package for validation
+   */
+  signup: publicProcedure
+    .input(signupSchema)  // Validates input with Zod
+    .mutation(async ({ input, ctx }) => {
+      return ctx.authService.signup(input);
+    }),
 
-    /**
-     * Signin Procedure
-     * 
-     * Input: { username: string, password: string }
-     * Output: AuthResponse (success with JWT token, or error)
-     * 
-     * Rate limited: 3 failed attempts = 5 minute lockout
-     */
-    signin: publicProcedure
-      .input(signinSchema)  // Validates input with Zod
-      .mutation(async ({ input, ctx }) => {
-        return ctx.authService.signin(input);
-      }),
-  });
-};
+  /**
+   * Signin Procedure
+   * 
+   * Input: { username: string, password: string }
+   * Output: AuthResponse (success with JWT token, or error)
+   * 
+   * Rate limited: 3 failed attempts = 5 minute lockout
+   */
+  signin: publicProcedure
+    .input(signinSchema)  // Validates input with Zod
+    .mutation(async ({ input, ctx }) => {
+      return ctx.authService.signin(input);
+    }),
+});
 
 // Export router type for frontend type inference
-export type AuthRouter = ReturnType<typeof createAuthRouter>;
+export type AuthRouter = typeof authRouter;

@@ -1,4 +1,4 @@
-import { router, createAuthRouter, TrpcContext } from './auth.router';
+import { router, authRouter, TrpcContext } from './auth.router';
 
 /**
  * App Router - combines all sub-routers
@@ -7,12 +7,10 @@ import { router, createAuthRouter, TrpcContext } from './auth.router';
  * - auth.signup
  * - auth.signin
  */
-export const createAppRouter = () => {
-  return router({
-    auth: createAuthRouter(),
-  });
-};
+export const appRouter = router({
+  auth: authRouter,
+});
 
 // Export types for frontend
-export type AppRouter = ReturnType<typeof createAppRouter>;
+export type AppRouter = typeof appRouter;
 export type { TrpcContext };

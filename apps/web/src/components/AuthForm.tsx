@@ -30,7 +30,7 @@ export function AuthForm({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<{ username: string; password: string }>({
     resolver: zodResolver(schema),
   });
 

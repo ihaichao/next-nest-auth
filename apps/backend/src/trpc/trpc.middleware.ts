@@ -1,7 +1,7 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
-import { createAppRouter, TrpcContext } from './app.router';
+import { appRouter, TrpcContext } from './app.router';
 import { AuthService } from '../auth/auth.service';
 
 /**
@@ -21,8 +21,6 @@ export class TrpcMiddleware implements NestMiddleware {
   constructor(private readonly authService: AuthService) {}
 
   async use(req: Request, res: Response) {
-    const appRouter = createAppRouter();
-
     // Build the full URL for the Fetch API Request
     const url = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
 
