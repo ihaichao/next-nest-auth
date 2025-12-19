@@ -18,6 +18,11 @@ COPY packages/shared/package.json ./packages/shared/
 COPY packages/shared/tsconfig.json ./packages/shared/
 COPY packages/shared/src ./packages/shared/src/
 
+# Copy backend (required for tRPC type inference)
+COPY apps/backend/package.json ./apps/backend/
+COPY apps/backend/prisma ./apps/backend/prisma/
+COPY apps/backend/src ./apps/backend/src/
+
 # Copy frontend
 COPY apps/web/package.json ./apps/web/
 COPY apps/web/tsconfig.json ./apps/web/
@@ -26,6 +31,9 @@ COPY apps/web/src ./apps/web/src/
 
 # Install dependencies
 RUN pnpm install --frozen-lockfile
+
+# Generate Prisma client for backend (needed for types)
+RUN pnpm --filter @next-nest-auth/backend db:generate
 
 # Build shared package
 RUN pnpm --filter @next-nest-auth/shared build

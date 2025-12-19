@@ -27,13 +27,6 @@ export const publicProcedure = t.procedure;
  * - signup: Create new user (mutation)
  * - signin: Authenticate user, return JWT (mutation)
  */
-/**
- * Auth Router - handles signup and signin
- * 
- * Procedures:
- * - signup: Create new user (mutation)
- * - signin: Authenticate user, return JWT (mutation)
- */
 export const authRouter = router({
   /**
    * Signup Procedure
