@@ -18,19 +18,22 @@ async function bootstrap() {
   const port = configService.get<number>('BACKEND_PORT', 4000);
 
   // Enable CORS for frontend
+  // In production, we allow all origins for now to ensure connectivity
   app.enableCors({
-    origin: ['http://localhost:3000'],
+    origin: true, // Auto-reflect origin
     credentials: true,
   });
 
   // Parse JSON body for tRPC requests
   app.use(express.json());
 
-  await app.listen(port);
+  // Listen on all interfaces (required for Docker)
+  await app.listen(port, '0.0.0.0');
   
+  const baseUrl = `http://localhost:${port}`;
   console.log('='.repeat(50));
-  console.log(`🚀 Backend server running on http://localhost:${port}`);
-  console.log(`📡 tRPC endpoint: http://localhost:${port}/trpc`);
+  console.log(`🚀 Backend server running on ${baseUrl}`);
+  console.log(`📡 tRPC endpoint: ${baseUrl}/trpc`);
   console.log('='.repeat(50));
 }
 
