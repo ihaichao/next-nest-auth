@@ -28,6 +28,7 @@ COPY apps/web/package.json ./apps/web/
 COPY apps/web/tsconfig.json ./apps/web/
 COPY apps/web/next.config.js ./apps/web/
 COPY apps/web/src ./apps/web/src/
+COPY apps/web/public ./apps/web/public/
 
 # Install dependencies
 RUN pnpm install --frozen-lockfile
