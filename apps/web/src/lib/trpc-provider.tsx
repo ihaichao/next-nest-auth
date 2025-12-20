@@ -9,9 +9,12 @@ import { trpc } from './trpc';
  * Get the API URL from environment or default to localhost
  */
 function getBaseUrl() {
-  if (typeof window !== 'undefined') {
-    return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/trpc';
+  // Use the public API URL if provided (baked in at build time or available at runtime)
+  if (process.env.NEXT_PUBLIC_API_URL) {
+    return process.env.NEXT_PUBLIC_API_URL;
   }
+  
+  // Default for development
   return 'http://localhost:4000/trpc';
 }
 

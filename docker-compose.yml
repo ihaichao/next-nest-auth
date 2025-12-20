@@ -48,7 +48,7 @@ services:
       dockerfile: apps/web/Dockerfile
     container_name: next-nest-auth-frontend
     environment:
-      NEXT_PUBLIC_API_URL: http://backend:4000/trpc
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:4000/trpc}
     ports:
       - "3000:3000"
     depends_on:
