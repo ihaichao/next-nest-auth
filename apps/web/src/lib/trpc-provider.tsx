@@ -9,12 +9,21 @@ import { trpc } from './trpc';
  * Get the API URL from environment or default to localhost
  */
 function getBaseUrl() {
-  // Use the public API URL if provided (baked in at build time or available at runtime)
+  // 1. If we are in the browser, auto-detect the hostname
+  if (typeof window !== 'undefined') {
+    const hostname = window.location.hostname;
+    // If not localhost, assume backend is on the same host but port 4000
+    if (hostname !== 'localhost' && hostname !== '127.0.0.1') {
+      return `http://${hostname}:4000/trpc`;
+    }
+  }
+
+  // 2. Fallback to env var (baked in at build time)
   if (process.env.NEXT_PUBLIC_API_URL) {
     return process.env.NEXT_PUBLIC_API_URL;
   }
   
-  // Default for development
+  // 3. Default for local development
   return 'http://localhost:4000/trpc';
 }
 
