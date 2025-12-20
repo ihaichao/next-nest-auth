@@ -45,20 +45,19 @@ WORKDIR /app
 # Install pnpm
 RUN corepack enable && corepack prepare pnpm@9.15.0 --activate
 
-# Copy package files
-COPY --from=builder /app/package.json ./
-COPY --from=builder /app/pnpm-workspace.yaml ./
-COPY --from=builder /app/pnpm-lock.yaml ./
+# Copy package files for production install
+COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
+COPY packages/shared/package.json ./packages/shared/
+COPY apps/backend/package.json ./apps/backend/
 
-# Copy built packages
-COPY --from=builder /app/packages/shared/package.json ./packages/shared/
+# Install production dependencies only
+# This handles monorepo symlinks correctly for the runner environment
+RUN pnpm install --prod --frozen-lockfile
+
+# Copy built artifacts
 COPY --from=builder /app/packages/shared/dist ./packages/shared/dist/
-
-# Copy backend
-COPY --from=builder /app/apps/backend/package.json ./apps/backend/
 COPY --from=builder /app/apps/backend/dist ./apps/backend/dist/
 COPY --from=builder /app/apps/backend/prisma ./apps/backend/prisma/
-COPY --from=builder /app/node_modules ./node_modules/
 
 # Set environment
 ENV NODE_ENV=production
